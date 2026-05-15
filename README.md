@@ -2,106 +2,74 @@
 
 Welcome to your personal **brain-to-build command center**. This is where **no idea is too crazy** — and where crazy ideas get the research, strategy, and execution plans they need to become real.
 
-## What This Is
+---
 
-DreamBoard is not just an idea notebook. It's a **full AI-powered execution system** that manages your ideas through their entire lifecycle:
+## Workspace Structure
 
 ```
-SPARK → RESEARCH → VALIDATION → PLAN → BUILD → LAUNCH
+dreamboard/
+├── README.md                    ← You are here (master index)
+├── GROUND_RULES.md              ← The constitution. Read this.
+├── AGENTS.md                    ← My playbook. How I operate.
+├── IDEA-INDEX.md                ← Dashboard of all ideas
+│
+├── system/                      ← The DreamBoard engine
+│   ├── ideas/                   ← Core idea repository
+│   │   ├── raw/                 ← Fresh brain-dumps
+│   │   ├── developing/          ← Active research & planning
+│   │   ├── incubating/          ← On hold
+│   │   └── completed/           ← Done!
+│   ├── templates/               ← All templates (lean canvas, PRD, etc.)
+│   ├── research/                ← General research archive
+│   ├── docs/                    ← General documents
+│   ├── diagrams/                ← Visual artifacts
+│   ├── plans/                   ← Execution plans
+│   └── archive/                 ← Dead ideas
+│
+├── projects/                    ← ACTIVE PROJECT WORKSPACES
+│   ├── bhatko/                  ← Bhatko.com — Spontaneous Travel Platform
+│   └── baagicha/                ← Baagicha — Apple Orchard Management App
+│
+└── .git/                        ← Everything tracked on GitHub
 ```
 
-Your AI co-founder (me) handles the heavy lifting: market research, competitor analysis, diagramming, PRDs, MVP planning, experiment design, and more.
+---
+
+## Active Projects
+
+| Project | Domain | Status | Spark |
+|---------|--------|--------|-------|
+| **[Bhatko](bhatko/README.md)** | bhatko.com | Developing | 🔥🔥🔥🔥🔥 |
+| **[Baagicha](baagicha/README.md)** | (App) | Developing | 🔥🔥🔥🔥 |
 
 ---
 
 ## How to Use
 
 ### 1. Brain-Dump Freely
-Just tell me your idea. I'll capture it instantly in `ideas/raw/`.
+Just tell me your idea. I'll capture it instantly in `system/ideas/raw/`.
 
 ### 2. Say the Magic Words
 I respond to natural voice commands:
 
 | You Say | I Do |
 |---------|------|
-| **"Research the market"** | Deep market research → `research/market/` |
-| **"Who are my competitors?"** | Competitor battlecard → `research/competitors/` |
-| **"Make a lean canvas"** | Business model canvas → `docs/lean-canvas/` |
-| **"Write a PRD"** | Product Requirements Doc → `docs/prd/` |
-| **"Draw the architecture"** | Mermaid diagram → `diagrams/architecture/` |
-| **"Plan the MVP"** | MVP scope + roadmap → `plans/mvp/` |
-| **"Design an experiment"** | Validation experiment → `plans/experiments/` |
-| **"Generate a report"** | Structured research report → `docs/reports/` |
+| **"Research the market"** | Deep market research |
+| **"Who are my competitors?"** | Competitor battlecard |
+| **"Make a lean canvas"** | Business model canvas |
+| **"Write a PRD"** | Product Requirements Doc |
+| **"Draw the architecture"** | Mermaid diagram |
+| **"Plan the MVP"** | MVP scope + roadmap |
+| **"Design an experiment"** | Validation experiment |
+| **"Generate a report"** | Structured research report |
 
-### 3. Let the System Work
-Every idea follows a validated path. I enforce the rules in `GROUND_RULES.md`:
-- Research before building
-- Validate or die
-- Bias for action
-- No idea rots in development forever
-
----
-
-## Directory Map
-
-```
-dreamboard/
-├── 📄 README.md              ← You are here
-├── 📄 GROUND_RULES.md        ← The constitution. Read this.
-├── 📄 AGENTS.md              ← My playbook. How I operate.
-├── 📄 IDEA-INDEX.md          ← Dashboard of all ideas
-│
-├── 🌱 ideas/                 ← Your idea repository
-│   ├── raw/                  ← Fresh brain-dumps
-│   ├── developing/           ← Active research & planning
-│   ├── incubating/           ← On hold
-│   └── completed/            ← Done!
-│
-├── 🔬 research/              ← All intelligence
-│   ├── market/               ← Market research, TAM/SAM/SOM
-│   ├── competitors/          ← Competitor analysis
-│   ├── tech-stack/           ← Technical research
-│   └── trends/               ← Industry trends
-│
-├── 📑 docs/                  ← Structured documents
-│   ├── lean-canvas/          ← Business model canvases
-│   ├── prd/                  ← Product Requirements Docs
-│   ├── personas/             ← User personas & JTBD
-│   └── reports/              ← Generated research reports
-│
-├── 📊 diagrams/              ← Visual artifacts (all Mermaid)
-│   ├── architecture/         ← System architecture
-│   ├── flow/                 ← User flows & processes
-│   ├── business/             ← Business model diagrams
-│   └── mindmaps/             ← Idea mind maps
-│
-├── 🗺️ plans/                 ← Execution plans
-│   ├── mvp/                  ← MVP scopes & feature lists
-│   ├── roadmap/              ← Timelines & Gantt charts
-│   └── experiments/          ← Validation experiments
-│
-├── 📁 archive/               ← Dead ideas (with post-mortems)
-│
-└── 📋 templates/             ← All templates
-```
-
----
-
-## Idea Lifecycle
-
-```
-[RAW] → [DEVELOPING] → [COMPLETED]
-   ↓         ↓
-[ARCHIVE] [INCUBATING]
-```
-
-| Status | Meaning | Exit Criteria |
-|--------|---------|---------------|
-| **Raw** | Fresh brain-dump. Unfiltered, chaotic, pure energy. | User asks to develop it |
-| **Developing** | Being researched, validated, and planned. | Lean Canvas + Experiment + MVP plan |
-| **Incubating** | Good idea, wrong timing. Let it sit. | User reactivates |
-| **Completed** | Done! Built, launched, or achieved. | Evidence of completion |
-| **Archive** | Killed or merged. Lessons learned. | Post-mortem written |
+### 3. Projects Get Their Own Workspace
+When an idea moves to `developing`, it gets a dedicated folder under `projects/` with its own:
+- `ideas/` — All related concepts
+- `research/` — Market, competitor, tech research
+- `docs/` — Lean canvas, PRD, personas
+- `diagrams/` — Architecture, flows, business models
+- `plans/` — MVP, experiments, roadmaps
 
 ---
 
@@ -115,32 +83,6 @@ Before ANY idea is "ready to build":
 - [ ] **MVP scoped** — smallest version defined
 - [ ] **Experiment designed** — you know how to test
 - [ ] **Tech stack chosen** — you know what to build with
-
----
-
-## Quick Start
-
-**New to DreamBoard?** Start here:
-
-1. Read `GROUND_RULES.md` — understand the system
-2. Dump your first idea: *"I have a crazy idea..."*
-3. Pick one developing idea and say: *"Make a lean canvas for [idea]"*
-4. Then: *"Research the market for [idea]"*
-5. Then: *"Plan the MVP for [idea]"*
-
-Watch your idea transform from a spark into an executable plan.
-
----
-
-## Why Mermaid for Diagrams?
-
-All diagrams use **Mermaid** syntax — a text-based diagram language that:
-- Renders automatically on GitHub
-- Is version-controlled (it's just text)
-- Requires zero tools or subscriptions
-- Works in VS Code, Notion, and any markdown viewer
-
-Need a PNG/SVG? Paste the code into [mermaid.live](https://mermaid.live).
 
 ---
 
