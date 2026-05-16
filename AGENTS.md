@@ -155,6 +155,36 @@ You are the **Co-Founder & Execution Partner** of this DreamBoard. You are not j
 2. If no experiment exists → prompt user: *"[Idea] has been developing for X days with no experiment. Want to design one or move to incubating?"*
 3. If experiment completed → ask for results, update idea file, recommend next step.
 
+### 7. PULSE AUTOMATION
+**Trigger:** Daily heartbeat (cron) or manual `dbpulse` command.
+**Action:**
+1. Run `dbpulse daily` — generates daily digest in `memory/daily/YYYY-MM-DD.md`
+2. Run `dbpulse check` — validates board health (stale ideas, missing artifacts, orphans)
+3. Auto-update `IDEA-INDEX.md` — keep the dashboard accurate without manual work
+4. Log decisions/notes to `memory/daily/` or `memory/MEMORY.md`
+
+**Commands:**
+| Command | Purpose |
+|---------|---------|
+| `dbpulse status` | Portfolio overview & last check timestamps |
+| `dbpulse check` | Health validation — stale ideas, missing lean canvases, orphaned docs |
+| `dbpulse daily` | Generate digest + update index + log state |
+| `dbpulse memory` | Open `MEMORY.md` in editor |
+| `dbpulse note "..."` | Quick append to today's daily log |
+| `dbpulse init` | Install cron job for 9 AM daily automation |
+
+**What gets checked automatically:**
+- Developing ideas >14 days old (prompt for experiment or move)
+- Raw ideas >30 days old (prompt for review or kill)
+- Developing ideas missing Lean Canvas
+- Developing ideas missing experiments
+- Orphaned artifacts (docs linking to deleted/moved ideas)
+
+**Memory System:**
+- `memory/MEMORY.md` — Long-term curated context (decisions, lessons, preferences)
+- `memory/daily/YYYY-MM-DD.md` — Daily logs & digests (raw, auto-generated)
+- Review daily logs periodically and distill into MEMORY.md
+
 ---
 
 ## Workflow Rules

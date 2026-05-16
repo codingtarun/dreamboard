@@ -11,24 +11,30 @@ dreamboard/
 ├── README.md                    ← You are here (master index)
 ├── GROUND_RULES.md              ← The constitution. Read this.
 ├── AGENTS.md                    ← My playbook. How I operate.
-├── IDEA-INDEX.md                ← Dashboard of all ideas
+├── IDEA-INDEX.md                ← Dashboard of all ideas (auto-updated)
 │
-├── system/                      ← The DreamBoard engine
-│   ├── ideas/                   ← Core idea repository
-│   │   ├── raw/                 ← Fresh brain-dumps
-│   │   ├── developing/          ← Active research & planning
-│   │   ├── incubating/          ← On hold
-│   │   └── completed/           ← Done!
-│   ├── templates/               ← All templates (lean canvas, PRD, etc.)
-│   ├── research/                ← General research archive
-│   ├── docs/                    ← General documents
-│   ├── diagrams/                ← Visual artifacts
-│   ├── plans/                   ← Execution plans
-│   └── archive/                 ← Dead ideas
+├── bin/
+│   └── dbpulse                  ← CLI automation tool
+├── scripts/
+│   └── lib.sh                   ← Pulse engine core
+├── memory/
+│   ├── MEMORY.md                ← Long-term curated context
+│   └── daily/                   ← Auto-generated daily digests
 │
-├── projects/                    ← ACTIVE PROJECT WORKSPACES
-│   ├── bhatko/                  ← Bhatko.com — Spontaneous Travel Platform
-│   └── baagicha/                ← Baagicha — Apple Orchard Management App
+├── ideas/                       ← Core idea repository
+│   ├── raw/                     ← Fresh brain-dumps
+│   ├── developing/              ← Active research & planning
+│   ├── incubating/              ← On hold
+│   └── completed/               ← Done!
+├── templates/                   ← All templates (lean canvas, PRD, etc.)
+├── research/                    ← General research archive
+├── docs/                        ← General documents
+├── diagrams/                    ← Visual artifacts
+├── plans/                       ← Execution plans
+├── archive/                     ← Dead ideas
+│
+├── bhatko/                      ← ACTIVE: Spontaneous Travel Platform
+├── baagicha/                    ← ACTIVE: Apple Orchard Management App
 │
 └── .git/                        ← Everything tracked on GitHub
 ```
@@ -46,10 +52,42 @@ dreamboard/
 
 ## How to Use
 
-### 1. Brain-Dump Freely
-Just tell me your idea. I'll capture it instantly in `system/ideas/raw/`.
+### 1. Let the Board Run Itself (Pulse Automation)
+DreamBoard has a built-in heartbeat system inspired by `.openclaw`:
 
-### 2. Say the Magic Words
+```bash
+# Add to PATH
+export PATH="$PWD/bin:$PATH"
+
+# Check board health anytime
+dbpulse status
+dbpulse check
+
+# Generate today's digest + auto-update index
+dbpulse daily
+
+# Quick capture a note
+dbpulse note "Had a breakthrough on Bhatko pricing"
+
+# Set up daily 9 AM automation
+dbpulse init
+```
+
+**What runs automatically:**
+- Daily digest in `memory/daily/YYYY-MM-DD.md`
+- Auto-updated `IDEA-INDEX.md` (no more manual upkeep)
+- Stale idea alerts (developing >14 days, raw >30 days)
+- Missing artifact detection (lean canvas, experiments)
+- Orphaned doc detection
+
+**Memory System:**
+- `memory/MEMORY.md` — Curated long-term context (decisions, lessons)
+- `memory/daily/` — Raw daily logs & digests
+
+### 2. Brain-Dump Freely
+Just tell me your idea. I'll capture it instantly in `ideas/raw/`.
+
+### 3. Say the Magic Words
 I respond to natural voice commands:
 
 | You Say | I Do |
@@ -63,7 +101,7 @@ I respond to natural voice commands:
 | **"Design an experiment"** | Validation experiment |
 | **"Generate a report"** | Structured research report |
 
-### 3. Projects Get Their Own Workspace
+### 4. Projects Get Their Own Workspace
 When an idea moves to `developing`, it gets a dedicated folder under `projects/` with its own:
 - `ideas/` — All related concepts
 - `research/` — Market, competitor, tech research
