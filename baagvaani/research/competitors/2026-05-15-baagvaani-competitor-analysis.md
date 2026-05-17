@@ -1,6 +1,6 @@
-# Competitor Analysis: Baagicha vs. Agri-Tech Landscape
+# Competitor Analysis: Baagvaani vs. Agri-Tech Landscape
 
-**Project:** Baagicha (बागीचा) — Apple Orchard Management App
+**Project:** Baagvaani (बागीचा) — Apple Orchard Management App
 **Date:** 2026-05-15
 **Researcher:** AI Curator
 **Focus:** Direct & indirect competitors in farm management, orchard tech, and agri-advisory in India
@@ -27,7 +27,7 @@ quadrantChart
     "Semios": [0.7, 0.9]
     "Jayalakshmi Agro Tech": [0.3, 0.4]
     "Mandi Trades": [0.4, 0.5]
-    "Baagicha (Target)": [0.9, 0.7]
+    "Baagvaani (Target)": [0.9, 0.7]
 ```
 
 ---
@@ -39,7 +39,7 @@ quadrantChart
 | Attribute | Details |
 |-----------|---------|
 | **Type** | Technology + Consultancy Hybrid |
-| **Regions** | Himachal, J&K, Uttarakhand (exact same as Baagicha!) |
+| **Regions** | Himachal, J&K, Uttarakhand (exact same as Baagvaani!) |
 | **Model** | B2B consultancy + digital tools + on-ground training |
 | **Services** | Plantation guidance, farm monitoring, pest control advisory, market linkage, training workshops |
 | **Strengths** | Established brand, on-ground presence, expert network, government connections |
@@ -150,7 +150,7 @@ quadrantChart
 
 ## Feature Comparison Matrix
 
-| Feature | Baagicha (Planned) | Orchard Solutions | IFFCO Kisan | Semios | farmOS | Crop Analytica |
+| Feature | Baagvaani (Planned) | Orchard Solutions | IFFCO Kisan | Semios | farmOS | Crop Analytica |
 |---------|-------------------|-------------------|-------------|--------|--------|----------------|
 | Apple-specific content | ✅ | ✅ | ❌ | ✅ | ❌ | ❌ |
 | Altitude-aware schedules | ✅ | ⚠️ | ❌ | ✅ | ❌ | ❌ |
@@ -172,7 +172,7 @@ Legend: ✅ = Yes, ❌ = No, ⚠️ = Partial/Limited
 
 ## SWOT Analysis
 
-### Strengths (Baagicha's Advantages)
+### Strengths (Baagvaani's Advantages)
 1. **First-mover** in apple-specific, Himalayan-focused orchard app
 2. **Altitude-aware intelligence** — unique differentiator
 3. **Bilingual** (Hindi + English) — critical for farmer adoption

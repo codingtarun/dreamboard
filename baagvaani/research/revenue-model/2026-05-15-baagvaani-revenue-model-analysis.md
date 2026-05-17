@@ -1,6 +1,6 @@
-# Revenue Model Analysis: Baagicha Apple Orchard App
+# Revenue Model Analysis: Baagvaani Apple Orchard App
 
-**Project:** Baagicha (बागीचा) — Apple Orchard Management App
+**Project:** Baagvaani (बागीचा) — Apple Orchard Management App
 **Date:** 2026-05-15
 **Researcher:** AI Curator
 **Target Users:** Apple farmers in Himachal Pradesh, Uttarakhand, J&K
@@ -9,7 +9,7 @@
 
 ## Executive Summary
 
-Baagicha has **multiple viable revenue streams**. The recommended strategy is:
+Baagvaani has **multiple viable revenue streams**. The recommended strategy is:
 
 > **Phase 1 (Year 1):** Free app → Maximize user acquisition → Build trust
 > **Phase 2 (Year 2):** Marketplace + Premium features → Start monetization
@@ -40,7 +40,7 @@ An in-app marketplace where farmers buy:
 ### Why It Works
 - Farmers already spending ₹10,000-50,000/year on inputs per orchard
 - Current channel: local dealers (often sell counterfeits at high margins)
-- Baagicha can offer **verified products at better prices**
+- Baagvaani can offer **verified products at better prices**
 - Natural fit: app already tells them WHAT to spray → next logical step is WHERE to buy
 
 ### Revenue Model
@@ -71,7 +71,7 @@ An in-app marketplace where farmers buy:
 - Weather alerts
 - 3-day mandi prices
 
-### Premium Tier: "Baagicha Plus" — ₹99/month or ₹999/year
+### Premium Tier: "Baagvaani Plus" — ₹99/month or ₹999/year
 | Feature | Free | Plus |
 |---------|------|------|
 | Spray schedule | Basic | Advanced + personalized |
@@ -131,19 +131,19 @@ Sell aggregated, real-time apple price data to:
 ### What It Is
 - Sponsored content from agrochemical brands
 - Featured product placements in spray schedules
-- "Recommended by Baagicha" product badges
+- "Recommended by Baagvaani" product badges
 - Co-branded farmer training programs
 
 ### Why It Works
 - Companies spend **₹500+ Crores/year** on farmer marketing in India
 - Traditional channels: dealer commissions, wall paintings, farmer meetings
-- Digital channel through Baagicha is **targeted, measurable, cheaper**
+- Digital channel through Baagvaani is **targeted, measurable, cheaper**
 
 ### Revenue Model
 | Partnership Type | Pricing |
 |-----------------|---------|
 | Featured product in spray schedule | ₹25,000-50,000/month per product |
-| "Baagicha Recommended" badge | ₹10,000-20,000/month per product |
+| "Baagvaani Recommended" badge | ₹10,000-20,000/month per product |
 | Sponsored disease advisory | ₹50,000-1,00,000/campaign |
 | Co-branded farmer workshop | ₹1,00,000-2,00,000/event |
 | Banner ads in app | ₹5,000-15,000/month per slot |
@@ -198,7 +198,7 @@ Sell anonymized, aggregated farm data to:
 - Insurance companies (crop insurance pricing)
 
 ### Why It Works
-- Baagicha will have **unique data**: spray patterns, disease outbreaks, yield data, weather correlation
+- Baagvaani will have **unique data**: spray patterns, disease outbreaks, yield data, weather correlation
 - This data doesn't exist anywhere else in structured form
 - Global trend: farm data is becoming a valuable commodity
 

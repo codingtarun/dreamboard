@@ -34,7 +34,7 @@ dreamboard/
 ├── archive/                     ← Dead ideas
 │
 ├── bhatko/                      ← ACTIVE: Spontaneous Travel Platform
-├── baagicha/                    ← ACTIVE: Apple Orchard Management App
+├── baagvaani/                   ← ACTIVE: Apple Orchard Management App (renamed from Baagicha)
 │
 └── .git/                        ← Everything tracked on GitHub
 ```
@@ -46,7 +46,7 @@ dreamboard/
 | Project | Domain | Status | Spark |
 |---------|--------|--------|-------|
 | **[Bhatko](bhatko/README.md)** | bhatko.com | Developing | 🔥🔥🔥🔥🔥 |
-| **[Baagicha](baagicha/README.md)** | (App) | Developing | 🔥🔥🔥🔥 |
+| **[Baagvaani](baagvaani/README.md)** | (App) | Developing | 🔥🔥🔥🔥🔥 |
 
 ---
 

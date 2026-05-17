@@ -34,7 +34,7 @@
 | # | Idea | Spark | Tags | Date |
 |---|------|-------|------|------|
 | 1 | [Bhatko — The Spontaneous Travel Platform](ideas/developing/2026-05-15-bhatko-spontaneous-travel-platform.md) | 🔥🔥🔥🔥🔥 | travel, ai, spontaneity, booking, experiences, mobile-app, marketplace | 2026-05-15 |
-| 2 | [Baagicha — AI-Powered Apple Orchard Management](ideas/developing/2026-05-16-baagicha-apple-orchard-management.md) | 🔥🔥🔥🔥🔥 | agriculture, ai, mobile-app, react-native, laravel, india, apple-farming, himalayan | 2026-05-16 |
+| 2 | [Baagvaani — AI-Powered Apple Orchard Management](ideas/developing/2026-05-16-baagvaani-apple-orchard-management.md) | 🔥🔥🔥🔥🔥 | agriculture, ai, mobile-app, react-native, laravel, india, apple-farming, himalayan, baagvaani | 2026-05-16 |
 | 3 | [SwiftCart — Lightweight Open-Source eCommerce CMS](ideas/developing/2026-05-16-swiftcart-lightweight-ecommerce-cms.md) | 🔥🔥🔥🔥🔥 | ecommerce, cms, php, opensource, india, small-business, zero-dependencies | 2026-05-16 |
 
 ## 💤 Incubating Ideas (Paused)
@@ -56,5 +56,5 @@
 | Project | Location | Artifacts |
 |---------|----------|-----------|
 | Bhatko | `bhatko/` | Lean Canvas, Competitors, Market Research, Architecture, User Flow, Business Model, MVP Plan |
-| Baagicha | `baagicha/` | Lean Canvas, Competitors, Market Research, Revenue Model, Architecture, User Flow, MVP Plan |
+| Baagvaani | `baagvaani/` | Lean Canvas, Competitors, Market Research, Revenue Model, Architecture, User Flow, MVP Plan, Feature Implementation Research, Mobile Feature Suggestions |
 | SwiftCart | `swiftcart/` | Lean Canvas, Architecture, Request Lifecycle, MVP Plan |

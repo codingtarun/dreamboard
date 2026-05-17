@@ -1,6 +1,6 @@
 # Apple Orchard Market Research: Himachal, Uttarakhand & Kashmir
 
-**Project:** Baagicha (बागीचा) — Apple Orchard Management App
+**Project:** Baagvaani (बागवाणी) — Apple Orchard Management App
 **Date:** 2026-05-15
 **Researcher:** AI Curator
 **Focus Regions:** Himachal Pradesh, Uttarakhand, Jammu & Kashmir
@@ -128,7 +128,7 @@
 | Government extension | Irregular, understaffed, no digital follow-up |
 | Agrochemical dealer advice | Biased toward selling products, not farmer welfare |
 
-### Baagicha's Opportunity
+### Baagvaani's Opportunity
 
 **No app exists that combines:**
 - Altitude-based spray schedules (below 6000ft / 6000-8000ft / above 8000ft)
@@ -140,7 +140,7 @@
 
 ---
 
-## Market Trends Favoring Baagicha
+## Market Trends Favoring Baagvaani
 
 ### 1. Smartphone Penetration in Rural India
 - **72% of farmers under 40** use smartphones for agri-decisions weekly
