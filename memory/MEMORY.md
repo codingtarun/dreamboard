@@ -51,3 +51,34 @@ Curated wisdom, decisions, and context that should survive across sessions.
 4. Create 2 premium starter themes (fashion + electronics)
 
 **User's exact words:** *"I have an idea, to finish this project as soon as possible and then approach some small Digital marketing companies and give them this product for free to implement for their clients, I can earn money by providing extra themes and creating custom themes for this CMS or plugin etc..."*
+
+---
+
+## SwiftCart Core Philosophy — 2026-05-19 (Clarified by User)
+
+**The fundamental insight the user keeps coming back to:**
+
+> When a small business sets up an eCommerce store, they are forced into one of two bad choices:
+> 1. **WordPress + WooCommerce + 20 plugins** — heavy, slow, plugin conflicts, needs mid-range hosting
+> 2. **OpenCart / Magento / Shopify** — either outdated, overkill, or expensive with lock-in
+>
+> **SwiftCart fixes this by being a truly lightweight eCommerce CMS with ZERO dependencies.**
+> No Composer packages. No npm. No build step. No 3rd party plugins needed for basic functionality.
+> Just pure PHP 8.2 + Alpine JS (or vanilla JS) + CSS.
+>
+> **The real win:** Because it's so light, a small business can run their entire store on the
+> **cheapest shared hosting** (₹99–300/month) instead of being forced to upgrade to
+> VPS/cloud hosting (₹1,000–5,000/month).
+>
+> This is not just about "no dependencies" as a developer preference — it's about
+> **democratizing eCommerce for the smallest businesses** who can't afford server costs.
+
+**Key phrases to use when pitching:**
+- "Runs on ₹99/month hosting"
+- "No plugin tax, no build step, no dependency hell"
+- "Your store loads in under 500ms even on cheap shared hosting"
+- "One afternoon to read the entire codebase"
+- "No vendor lock-in — you own every file"
+
+**This is the emotional hook for agencies:**
+Tell their clients: *"We can build you a store that costs ₹99/month to host instead of ₹2,000/month — and it will be faster."*
