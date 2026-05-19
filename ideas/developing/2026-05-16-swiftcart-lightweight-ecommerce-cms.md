@@ -302,9 +302,12 @@ core/
 - [System Architecture](../swiftcart/diagrams/architecture/2026-05-16-swiftcart-system-architecture.mermaid.md)
 - [Request Lifecycle](../swiftcart/diagrams/flow/2026-05-16-swiftcart-request-lifecycle.mermaid.md)
 - [MVP Plan](../swiftcart/plans/mvp/2026-05-16-swiftcart-mvp-plan.md)
+- [Agency Go-To-Market Strategy](../swiftcart/plans/2026-05-19-agency-go-to-market-strategy.md)
+- [Agency Go-To-Market Research](../research/market/2026-05-19-swiftcart-agency-go-to-market-research.md)
 
 ---
 
 ## Notes Log
 
 - **2026-05-16** — Added to DreamBoard as developing. Foundation (Phase 1) and Core MVC (Phase 2) complete. Storefront templates and admin panel views built. Next critical milestone: database layer + models.
+- **2026-05-19** — Agency-first go-to-market strategy defined. Research validates: Indian agencies are frustrated with WooCommerce maintenance and Shopify fees. Decision: sell through agencies (free core + theme/plugin marketplace), not direct to merchants. 8-week MVP sprint + 90-day agency onboarding plan created.
