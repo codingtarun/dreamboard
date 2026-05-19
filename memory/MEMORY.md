@@ -13,8 +13,14 @@ Curated wisdom, decisions, and context that should survive across sessions.
 
 | Date | Decision | Rationale |
 |------|----------|-----------|
+| 2026-05-19 | Agency-first GTM for SwiftCart | Agencies already have clients and are frustrated with WooCommerce/Shopify. Free core + paid themes/plugins is the WordPress model. |
+| 2026-05-19 | Core value prop = cheap hosting, not "zero deps" | User clarified: the real customer-facing benefit is running on ₹99/month shared hosting. "Zero dependencies" is just the mechanism. |
 
 ## Lessons Learned
+
+- The user repeatedly refines toward simplicity and accessibility. When they clarify, listen — it's usually the real insight.
+- "Lightweight" is a developer feature. "Saves you ₹1,500/month on hosting" is a business outcome. Always pitch the outcome.
+- SwiftCart's competitive moat is not features — it's TCO (Total Cost of Ownership) for Indian small businesses.
 
 - 
 

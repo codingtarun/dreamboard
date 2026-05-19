@@ -153,6 +153,14 @@ Small business owners in India face a **trilemma** when choosing eCommerce:
 | Code readability | **800-line core** | 50K+ files | Black box |
 | Setup time | **10 minutes** | 2-4 hours | 15 minutes |
 
+### The Core Philosophy (User's Words)
+
+> *"What if we have a lightweight ecommerce CMS with no dependencies, no 3rd party plugins, no npm — just pure PHP + JS + CSS? The user can run it on the cheapest shared hosting instead of being forced into mid-range servers. That's the whole point."*
+>
+> **This is not about developer preferences. This is about democratizing eCommerce for the smallest businesses who can't afford server costs.**
+>
+> A store owner paying ₹99/month for hosting should still have a fast, beautiful, fully-functional online store. SwiftCart makes that possible.
+
 ---
 
 ## Tech Stack
