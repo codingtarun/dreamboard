@@ -12,9 +12,9 @@
 | 🔨 Developing | 3 |
 | 💤 Incubating | 0 |
 | ✅ Completed | 1 |
-| 🪦 Archived | 0 |
-| **Total Ideas** | **9** |
-| **Active Projects** | **7** |
+| 🪦 Archived | 1 |
+| **Total Ideas** | **10** |
+| **Active Projects** | **6** |
 
 ---
 
@@ -27,7 +27,7 @@
 | 3 | [Bhatko Local — Experience Marketplace](ideas/raw/2026-05-15-bhatko-local-experience-marketplace.md) | 🔥🔥🔥🔥 | travel, experiences, marketplace, local, hosts, bhatko | 2026-05-15 |
 | 4 | [Bhatko Social — Group Trip Planner](ideas/raw/2026-05-15-bhatko-social-group-trip-planner.md) | 🔥🔥🔥 | travel, social, group, trip-planner, friends, bhatko | 2026-05-15 |
 | 5 | [The Dream Board Itself](ideas/raw/2026-05-15-dream-board-itself.md) | 🔥🔥🔥🔥 | meta, organization, creativity, system | 2026-05-15 |
-| 5 | [Local Network Media Browser](ideas/raw/2026-05-16-local-network-media-browser.md) | 🔥🔥🔥🔥 | mobile-app, media-browser, local-network, file-sharing, cross-platform, smb, nas, photos | 2026-05-16 |
+| 6 | [Local Network Media Browser](ideas/raw/2026-05-16-local-network-media-browser.md) | 🔥🔥🔥🔥 | mobile-app, media-browser, local-network, file-sharing, cross-platform, smb, nas, photos | 2026-05-16 |
 
 ## 🔨 Developing Ideas (In Progress)
 
@@ -47,9 +47,15 @@
 | # | Idea | Spark | Tags | Date | Result |
 |---|------|-------|------|------|--------|
 
+## 🪦 Archived Ideas (RIP)
+
+| # | Idea | Spark | Tags | Date | Reason |
+|---|------|-------|------|------|--------|
+| 1 | [Open-Source YouTube to MP3 Desktop App](ideas/archive/2026-05-20-open-source-youtube-to-mp3-desktop-app.md) | 🔥🔥🔥 | opensource, desktop-app, media-converter, youtube, audio, video | 2026-05-20 | Legal risk — YouTube ToS violation, DMCA liability, saturated market |
+
 ---
 
-*Last updated: 2026-05-19 via DreamBoard Pulse*
+*Last updated: 2026-05-20 via DreamBoard Pulse*
 
 ## 📁 Active Project Workspaces
 

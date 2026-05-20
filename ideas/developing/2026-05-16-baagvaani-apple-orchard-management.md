@@ -339,6 +339,8 @@ Apple farming in the Himalayas faces **six critical challenges**:
 - [Revenue Model](../baagvaani/research/revenue-model/2026-05-15-baagvaani-revenue-model-analysis.md)
 - [Feature Implementation Research](../baagvaani/research/tech-stack/2026-05-17-baagvaani-feature-implementation-research.md)
 - [Mobile Feature Suggestions](../baagvaani/research/tech-stack/2026-05-17-baagvaani-mobile-feature-suggestions.md)
+- [Prediction Engine — Global DSS Landscape](../baagvaani/research/competitors/2026-05-20-apple-dss-global-landscape.md)
+- [Prediction Engine — Technical Architecture](../baagvaani/research/tech-stack/2026-05-20-baagvaani-prediction-engine-architecture.md)
 
 ---
 
