@@ -5,9 +5,11 @@ Curated wisdom, decisions, and context that should survive across sessions.
 
 ## Active Context
 
-- **Current Focus:**
-- **Last Session Date:**
+- **Current Focus:** SwiftCart MVP sprint (paused), Offline Music Player idea (raw/researched)
+- **Last Session Date:** 2026-05-21
 - **Open Decisions:**
+  - Whether to move Offline Music Player from `raw` → `developing` (user said "not now")
+  - SwiftCart 8-week MVP execution (pending user return)
 
 ## Key Decisions
 

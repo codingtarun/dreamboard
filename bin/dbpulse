@@ -1,0 +1,503 @@
+#!/usr/bin/env bash
+# =============================================================================
+# DreamBoard Pulse — CLI
+# Usage: dbpulse <command> [options]
+#
+# Commands:
+#   status      Show board health & portfolio overview
+#   check       Run validation checks (stale ideas, missing artifacts)
+#   daily       Run daily digest & maintenance
+#   memory      Show or edit MEMORY.md
+#   note        Add a quick note to today's daily log
+#   init        Set up cron job for automated heartbeat
+#   help        Show this help
+# =============================================================================
+
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../scripts" && pwd)"
+source "$SCRIPT_DIR/lib.sh"
+
+# ---------------------------------------------------------------------------
+# Commands
+# ---------------------------------------------------------------------------
+
+cmd_status() {
+    local raw_count developing_count incubating_count completed_count archived_count total
+    raw_count=$(count_ideas "$IDEAS_DIR/raw")
+    developing_count=$(count_ideas "$IDEAS_DIR/developing")
+    incubating_count=$(count_ideas "$IDEAS_DIR/incubating")
+    completed_count=$(count_ideas "$IDEAS_DIR/completed")
+    archived_count=$(count_ideas "$IDEAS_DIR/archive")
+    total=$((raw_count + developing_count + incubating_count + completed_count + archived_count))
+
+    _log_section "📊 DreamBoard Pulse — Portfolio Status"
+    echo -e "  ${C_BOLD}Metric${C_RESET}          ${C_BOLD}Count${C_RESET}"
+    echo    "  ─────────────────────"
+    echo -e "  🌱 Raw Ideas      ${C_CYAN}$raw_count${C_RESET}"
+    echo -e "  🔨 Developing     ${C_CYAN}$developing_count${C_RESET}"
+    echo -e "  💤 Incubating     ${C_CYAN}$incubating_count${C_RESET}"
+    echo -e "  ✅ Completed      ${C_CYAN}$completed_count${C_RESET}"
+    echo -e "  🪦 Archived       ${C_CYAN}$archived_count${C_RESET}"
+    echo    "  ─────────────────────"
+    echo -e "  📁 Total Ideas    ${C_BOLD}$total${C_RESET}"
+    echo
+
+    local active=$((developing_count + raw_count))
+    echo -e "  Active Projects: ${C_BOLD}$active${C_RESET}"
+
+    # Last check times
+    _ensure_state
+    local last_health last_index last_digest
+    last_health=$(_get_state "lastChecks.health")
+    last_index=$(_get_state "lastChecks.index")
+    last_digest=$(_get_state "lastChecks.digest")
+
+    echo
+    _log_section "⏱️  Last Automated Checks"
+    [[ -n "$last_health" ]] && echo -e "  Health check:  $last_health" || echo -e "  Health check:  ${C_DIM}never${C_RESET}"
+    [[ -n "$last_index" ]] && echo -e "  Index update:  $last_index" || echo -e "  Index update:  ${C_DIM}never${C_RESET}"
+    [[ -n "$last_digest" ]] && echo -e "  Daily digest:  $last_digest" || echo -e "  Daily digest:  ${C_DIM}never${C_RESET}"
+}
+
+cmd_check() {
+    _log_section "🔍 Running Validation Checks"
+
+    local issues=0
+
+    # 1. Stale developing ideas (>14 days)
+    local stale_developing
+    stale_developing=$(find_stale "$IDEAS_DIR/developing" 14 "developing")
+    if [[ -n "$stale_developing" ]]; then
+        _log_warn "Ideas in developing/ stale (>14 days):"
+        while IFS=$'\t' read -r title date age label; do
+            echo -e "   ${C_YELLOW}•${C_RESET} $title (${age} days old, $date)"
+            ((issues++)) || true
+        done <<< "$stale_developing"
+        echo
+    fi
+
+    # 2. Ancient raw ideas (>30 days)
+    local stale_raw
+    stale_raw=$(find_stale "$IDEAS_DIR/raw" 30 "raw")
+    if [[ -n "$stale_raw" ]]; then
+        _log_warn "Ideas in raw/ untouched (>30 days):"
+        while IFS=$'\t' read -r title date age label; do
+            echo -e "   ${C_YELLOW}•${C_RESET} $title (${age} days old, $date)"
+            ((issues++)) || true
+        done <<< "$stale_raw"
+        echo
+    fi
+
+    # 3. Developing ideas missing lean canvas
+    local missing_lc
+    missing_lc=$(find_missing_lean_canvas)
+    if [[ -n "$missing_lc" ]]; then
+        _log_warn "Developing ideas missing Lean Canvas:"
+        while IFS= read -r title; do
+            echo -e "   ${C_RED}•${C_RESET} $title"
+            ((issues++)) || true
+        done <<< "$missing_lc"
+        echo
+    fi
+
+    # 4. Developing ideas missing experiments
+    local missing_exp
+    missing_exp=$(find_missing_experiments)
+    if [[ -n "$missing_exp" ]]; then
+        _log_warn "Developing ideas with no experiment designed:"
+        while IFS= read -r title; do
+            echo -e "   ${C_RED}•${C_RESET} $title"
+            ((issues++)) || true
+        done <<< "$missing_exp"
+        echo
+    fi
+
+    # 5. Orphaned artifacts (docs not linking to existing ideas)
+    local orphans=0
+    for doc in "$DBPULSE_ROOT"/docs/*/*/*.md "$DBPULSE_ROOT"/research/*/*/*.md "$DBPULSE_ROOT"/diagrams/*/*/*.md "$DBPULSE_ROOT"/plans/*/*/*.md; do
+        [[ -f "$doc" ]] || continue
+        local linked
+        linked=$(grep -oP '\.\./ideas/[^)]+' "$doc" 2>/dev/null | head -1 || true)
+        if [[ -n "$linked" ]]; then
+            local target="$DBPULSE_ROOT/$(echo "$linked" | sed 's|\.\./||')"
+            if [[ ! -f "$target" ]]; then
+                echo -e "   ${C_RED}⚠${C_RESET} Orphaned artifact: $(basename "$doc") → broken link"
+                ((orphans++)) || true
+            fi
+        fi
+    done
+    if [[ $orphans -gt 0 ]]; then
+        _log_warn "$orphans orphaned artifact(s) with broken idea links."
+        ((issues+=orphans)) || true
+    fi
+
+    if [[ $issues -eq 0 ]]; then
+        _log_ok "All checks passed. Board is healthy."
+    else
+        _log_err "$issues issue(s) found. Run 'dbpulse daily' for a full report."
+    fi
+
+    _update_state_str "lastChecks.health" "$(_now)"
+}
+
+cmd_daily() {
+    local today
+    today=$(_today)
+    local digest_file="$DAILY_DIR/$today.md"
+
+    mkdir -p "$DAILY_DIR"
+
+    _log_section "📰 DreamBoard Daily Digest — $today"
+
+    # Build digest content
+    {
+        echo "# Daily Digest — $today"
+        echo
+        echo "**Generated:** $(_now)"
+        echo
+
+        echo "## Portfolio Snapshot"
+        echo
+        echo "| Stage | Count |"
+        echo "|-------|-------|"
+        echo "| Raw | $(count_ideas "$IDEAS_DIR/raw") |"
+        echo "| Developing | $(count_ideas "$IDEAS_DIR/developing") |"
+        echo "| Incubating | $(count_ideas "$IDEAS_DIR/incubating") |"
+        echo "| Completed | $(count_ideas "$IDEAS_DIR/completed") |"
+        echo "| Archived | $(count_ideas "$IDEAS_DIR/archive") |"
+        echo
+
+        echo "## 🚨 Attention Needed"
+        echo
+
+        local has_issues=false
+
+        # Stale developing
+        local stale_dev
+        stale_dev=$(find_stale "$IDEAS_DIR/developing" 14 "developing")
+        if [[ -n "$stale_dev" ]]; then
+            has_issues=true
+            echo "### Stale Developing Ideas (>14 days)"
+            echo
+            while IFS=$'\t' read -r title date age label; do
+                echo "- **$title** — $age days old ($date)"
+            done <<< "$stale_dev"
+            echo
+        fi
+
+        # Ancient raw
+        local stale_raw
+        stale_raw=$(find_stale "$IDEAS_DIR/raw" 30 "raw")
+        if [[ -n "$stale_raw" ]]; then
+            has_issues=true
+            echo "### Untouched Raw Ideas (>30 days)"
+            echo
+            while IFS=$'\t' read -r title date age label; do
+                echo "- **$title** — $age days old ($date)"
+            done <<< "$stale_raw"
+            echo
+        fi
+
+        # Missing lean canvas
+        local missing_lc
+        missing_lc=$(find_missing_lean_canvas)
+        if [[ -n "$missing_lc" ]]; then
+            has_issues=true
+            echo "### Missing Lean Canvas (Developing Ideas)"
+            echo
+            while IFS= read -r title; do
+                echo "- **$title**"
+            done <<< "$missing_lc"
+            echo
+        fi
+
+        # Missing experiments
+        local missing_exp
+        missing_exp=$(find_missing_experiments)
+        if [[ -n "$missing_exp" ]]; then
+            has_issues=true
+            echo "### Missing Experiments (Developing Ideas)"
+            echo
+            while IFS= read -r title; do
+                echo "- **$title**"
+            done <<< "$missing_exp"
+            echo
+        fi
+
+        if [[ "$has_issues" == false ]]; then
+            echo "✅ No issues. Board is healthy."
+            echo
+        fi
+
+        echo "## 📋 Recent Activity"
+        echo
+        echo "### Last 5 modified files:"
+        echo '```'
+        find "$DBPULSE_ROOT" -type f \( -name '*.md' -o -name '*.mermaid.md' \) ! -path '*/.git/*' ! -path '*/memory/*' -printf '%T@ %p\n' 2>/dev/null | sort -rn | head -5 | cut -d' ' -f2- | sed "s|$DBPULSE_ROOT/||" || echo "(none)"
+        echo '```'
+        echo
+
+        echo "## 📝 Notes"
+        echo
+        echo "_(Add any observations or decisions here)_"
+        echo
+
+    } > "$digest_file"
+
+    _log_ok "Digest written to: memory/daily/$today.md"
+
+    # Also update index
+    cmd_update_index
+
+    _update_state_str "lastChecks.digest" "$(_now)"
+
+    # Print digest preview
+    echo
+    cat "$digest_file"
+}
+
+cmd_memory() {
+    local mem_file="$MEMORY_DIR/MEMORY.md"
+    if [[ ! -f "$mem_file" ]]; then
+        mkdir -p "$MEMORY_DIR"
+        cat > "$mem_file" << 'EOF'
+# 🧠 DreamBoard Memory
+
+This is the long-term memory for the DreamBoard agent.
+Curated wisdom, decisions, and context that should survive across sessions.
+
+## Active Context
+
+- **Current Focus:**
+- **Last Session Date:**
+- **Open Decisions:**
+
+## Key Decisions
+
+| Date | Decision | Rationale |
+|------|----------|-----------|
+
+## Lessons Learned
+
+- 
+
+## Preferences
+
+- 
+
+## People & Relationships
+
+- 
+EOF
+    fi
+
+    if [[ -t 1 ]]; then
+        # Interactive — open in editor if available
+        if [[ -n "${EDITOR:-}" ]]; then
+            $EDITOR "$mem_file"
+        elif command -v nano >/dev/null 2>&1; then
+            nano "$mem_file"
+        else
+            _log_info "MEMORY.md location: $mem_file"
+            cat "$mem_file"
+        fi
+    else
+        cat "$mem_file"
+    fi
+}
+
+cmd_note() {
+    local today
+    today=$(_today)
+    local note_file="$DAILY_DIR/$today.md"
+    mkdir -p "$DAILY_DIR"
+
+    local note="$*"
+    if [[ -z "$note" ]]; then
+        _log_err "Usage: dbpulse note <your note text>"
+        exit 1
+    fi
+
+    if [[ ! -f "$note_file" ]]; then
+        echo "# Daily Log — $today" > "$note_file"
+        echo "" >> "$note_file"
+    fi
+
+    echo "- [$(_now)] $note" >> "$note_file"
+    _log_ok "Note saved to memory/daily/$today.md"
+}
+
+cmd_init() {
+    _log_section "🔧 DreamBoard Pulse Setup"
+
+    # Make executable
+    chmod +x "$SCRIPT_DIR/"*.sh 2>/dev/null || true
+    chmod +x "$DBPULSE_ROOT/bin/dbpulse"
+
+    # Check if already in crontab
+    if crontab -l 2>/dev/null | grep -q "dbpulse daily"; then
+        _log_warn "Cron job already exists."
+    else
+        local cron_line
+        cron_line="0 9 * * * cd $DBPULSE_ROOT && $DBPULSE_ROOT/bin/dbpulse daily >> $DBPULSE_ROOT/memory/cron.log 2>&1"
+        (crontab -l 2>/dev/null || true; echo "$cron_line") | crontab -
+        _log_ok "Cron job installed: daily digest at 9:00 AM"
+    fi
+
+    _log_info "Add to your PATH:"
+    echo "   export PATH=\"$DBPULSE_ROOT/bin:\$PATH\""
+    echo
+    _log_ok "Setup complete."
+}
+
+cmd_update_index() {
+    _log_info "Updating IDEA-INDEX.md..."
+
+    local raw_count developing_count incubating_count completed_count archived_count total
+    raw_count=$(count_ideas "$IDEAS_DIR/raw")
+    developing_count=$(count_ideas "$IDEAS_DIR/developing")
+    incubating_count=$(count_ideas "$IDEAS_DIR/incubating")
+    completed_count=$(count_ideas "$IDEAS_DIR/completed")
+    archived_count=$(count_ideas "$IDEAS_DIR/archive")
+    total=$((raw_count + developing_count + incubating_count + completed_count + archived_count))
+    local active=$((developing_count + raw_count))
+
+    # Generate new index
+    cat > "$INDEX_FILE" << EOF
+# 🗂️ Idea Index
+
+> Auto-generated dashboard of all ideas. Sorted by status, then by spark level.
+
+---
+
+## 📊 Portfolio Overview
+
+| Metric | Count |
+|--------|-------|
+| 🌱 Raw Ideas | $raw_count |
+| 🔨 Developing | $developing_count |
+| 💤 Incubating | $incubating_count |
+| ✅ Completed | $completed_count |
+| 🪦 Archived | $archived_count |
+| **Total Ideas** | **$total** |
+| **Active Projects** | **$active** |
+
+---
+
+## 🌱 Raw Ideas (Fresh & Wild)
+
+| # | Idea | Spark | Tags | Date |
+|---|------|-------|------|------|
+EOF
+
+    local i=1
+    while IFS=$'\t' read -r date slug title spark tags age; do
+        local link="ideas/raw/$date-$slug.md"
+        printf '| %d | [%s](%s) | %s | %s | %s |\n' "$i" "$title" "$link" "$spark" "$tags" "$date" >> "$INDEX_FILE"
+        ((i++)) || true
+    done < <(list_ideas "$IDEAS_DIR/raw")
+
+    cat >> "$INDEX_FILE" << 'EOF'
+
+## 🔨 Developing Ideas (In Progress)
+
+| # | Idea | Spark | Tags | Date |
+|---|------|-------|------|------|
+EOF
+
+    i=1
+    while IFS=$'\t' read -r date slug title spark tags age; do
+        local link="ideas/developing/$date-$slug.md"
+        printf '| %d | [%s](%s) | %s | %s | %s |\n' "$i" "$title" "$link" "$spark" "$tags" "$date" >> "$INDEX_FILE"
+        ((i++)) || true
+    done < <(list_ideas "$IDEAS_DIR/developing")
+
+    cat >> "$INDEX_FILE" << 'EOF'
+
+## 💤 Incubating Ideas (Paused)
+
+| # | Idea | Spark | Tags | Date |
+|---|------|-------|------|------|
+EOF
+
+    i=1
+    while IFS=$'\t' read -r date slug title spark tags age; do
+        local link="ideas/incubating/$date-$slug.md"
+        printf '| %d | [%s](%s) | %s | %s | %s |\n' "$i" "$title" "$link" "$spark" "$tags" "$date" >> "$INDEX_FILE"
+        ((i++)) || true
+    done < <(list_ideas "$IDEAS_DIR/incubating")
+
+    cat >> "$INDEX_FILE" << 'EOF'
+
+## ✅ Completed Ideas (Done!)
+
+| # | Idea | Spark | Tags | Date | Result |
+|---|------|-------|------|------|--------|
+EOF
+
+    i=1
+    while IFS=$'\t' read -r date slug title spark tags age; do
+        local link="ideas/completed/$date-$slug.md"
+        printf '| %d | [%s](%s) | %s | %s | %s | TBD |\n' "$i" "$title" "$link" "$spark" "$tags" "$date" >> "$INDEX_FILE"
+        ((i++)) || true
+    done < <(list_ideas "$IDEAS_DIR/completed")
+
+    cat >> "$INDEX_FILE" << EOF
+
+---
+
+*Last updated: $(_today) via DreamBoard Pulse*
+EOF
+
+    _log_ok "IDEA-INDEX.md updated."
+    _update_state_str "lastChecks.index" "$(_now)"
+}
+
+cmd_help() {
+    echo "DreamBoard Pulse — Automated upkeep for your idea board"
+    echo
+    echo "Usage: dbpulse <command>"
+    echo
+    echo "Commands:"
+    echo "  status      Show portfolio health & last check times"
+    echo "  check       Run validation checks on all ideas & artifacts"
+    echo "  daily       Generate daily digest + auto-update index"
+    echo "  memory      Open MEMORY.md in your editor"
+    echo "  note        Add a quick note to today's log"
+    echo "  init        Install cron job for daily automation"
+    echo "  help        Show this help"
+    echo
+    echo "Examples:"
+    echo "  dbpulse status"
+    echo "  dbpulse check"
+    echo "  dbpulse daily"
+    echo "  dbpulse note 'Had a great call about Bhatko pricing'"
+    echo "  dbpulse init"
+}
+
+# ---------------------------------------------------------------------------
+# Main
+# ---------------------------------------------------------------------------
+
+main() {
+    local cmd="${1:-help}"
+    shift || true
+
+    case "$cmd" in
+        status)   cmd_status ;;
+        check)    cmd_check ;;
+        daily)    cmd_daily ;;
+        memory)   cmd_memory ;;
+        note)     cmd_note "$*" ;;
+        init)     cmd_init ;;
+        help|--help|-h) cmd_help ;;
+        *)
+            _log_err "Unknown command: $cmd"
+            cmd_help
+            exit 1
+            ;;
+    esac
+}
+
+main "$@"

@@ -192,6 +192,8 @@ baagvaaniworkspace/
 | [Revenue Model](research/revenue-model/2026-05-15-baagvaani-revenue-model-analysis.md) | 8 revenue streams, unit economics |
 | [Feature Implementation Research](research/tech-stack/2026-05-17-baagvaani-feature-implementation-research.md) | How to build new features from PDF roadmap |
 | [Mobile App Feature Suggestions](research/tech-stack/2026-05-17-baagvaani-mobile-feature-suggestions.md) | Additional mobile app features & ideas |
+| [Prediction Engine Architecture](research/tech-stack/2026-05-20-baagvaani-prediction-engine-architecture.md) | Technical blueprint with pseudocode |
+| **[Implementation Guide](../../baagichaworkspace/research/prediction-engine/00_INDEX.md)** | **Production-ready code for Laravel + React Native** |
 
 ---
 

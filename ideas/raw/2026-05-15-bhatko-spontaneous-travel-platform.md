@@ -1,9 +1,9 @@
 # Bhatko — The Spontaneous Travel Platform
 
-**Status:** developing
+**Status:** raw
 **Spark:** 🔥🔥🔥🔥🔥
 **Created:** 2026-05-15
-**Last Updated:** 2026-05-15
+**Last Updated:** 2026-05-16
 **Tags:** travel, ai, spontaneity, booking, experiences, mobile-app, marketplace
 **Domain:** bhatko.com
 

@@ -8,13 +8,13 @@
 
 | Metric | Count |
 |--------|-------|
-| 🌱 Raw Ideas | 5 |
+| 🌱 Raw Ideas | 6 |
 | 🔨 Developing | 3 |
 | 💤 Incubating | 0 |
 | ✅ Completed | 1 |
 | 🪦 Archived | 1 |
-| **Total Ideas** | **10** |
-| **Active Projects** | **6** |
+| **Total Ideas** | **11** |
+| **Active Projects** | **7** |
 
 ---
 
@@ -28,6 +28,7 @@
 | 4 | [Bhatko Social — Group Trip Planner](ideas/raw/2026-05-15-bhatko-social-group-trip-planner.md) | 🔥🔥🔥 | travel, social, group, trip-planner, friends, bhatko | 2026-05-15 |
 | 5 | [The Dream Board Itself](ideas/raw/2026-05-15-dream-board-itself.md) | 🔥🔥🔥🔥 | meta, organization, creativity, system | 2026-05-15 |
 | 6 | [Local Network Media Browser](ideas/raw/2026-05-16-local-network-media-browser.md) | 🔥🔥🔥🔥 | mobile-app, media-browser, local-network, file-sharing, cross-platform, smb, nas, photos | 2026-05-16 |
+| 7 | [Simple Offline Music Player for Android](ideas/raw/2026-05-21-simple-offline-music-player-android.md) | 🔥🔥🔥🔥 | mobile-app, android, offline-music, music-player, lightweight, ui-ux, privacy, no-ads | 2026-05-21 |
 
 ## 🔨 Developing Ideas (In Progress)
 
@@ -55,7 +56,7 @@
 
 ---
 
-*Last updated: 2026-05-20 via DreamBoard Pulse*
+*Last updated: 2026-05-21 via DreamBoard Pulse*
 
 ## 📁 Active Project Workspaces
 

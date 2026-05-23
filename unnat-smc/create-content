@@ -1,0 +1,182 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# ═══════════════════════════════════════════════════════════════════════════════
+#   unnat-smc  —  Smart Content Forge
+#   Usage: ./create-content ["Your Topic"]
+#          ./create-content          (interactive mode)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+OUTPUT_BASE="$SCRIPT_DIR/outputs"
+DATE_PREFIX="$(date +%Y-%m-%d)"
+
+# ── Helpers ───────────────────────────────────────────────────────────────────
+slugify() {
+    echo "$1" | tr '[:upper:]' '[:lower:]' | tr -cs 'a-z0-9' '-' | sed 's/-$//;s/^-//'
+}
+
+prompt_topic() {
+    if [ $# -gt 0 ]; then
+        echo "$*"
+        return
+    fi
+    echo ""
+    echo "┌─────────────────────────────────────────────────────────────┐"
+    echo "│           🚀  unnat-smc — Smart Content Forge                │"
+    echo "└─────────────────────────────────────────────────────────────┘"
+    echo ""
+    read -rp "📝 Enter your topic / idea: " topic
+    if [ -z "$topic" ]; then
+        echo "❌ Topic cannot be empty. Exiting."
+        exit 1
+    fi
+    echo "$topic"
+}
+
+# ── Main ──────────────────────────────────────────────────────────────────────
+TOPIC="$(prompt_topic "$@")"
+SLUG="$(slugify "$TOPIC")"
+OUTPUT_DIR="$OUTPUT_BASE/$DATE_PREFIX-$SLUG"
+mkdir -p "$OUTPUT_DIR"
+
+echo ""
+echo "✅ Output directory: $OUTPUT_DIR"
+echo ""
+
+# ── Generate AI Prompt ────────────────────────────────────────────────────────
+PROMPT_FILE="$OUTPUT_DIR/prompt.md"
+
+cat > "$PROMPT_FILE" << 'PROMPT_EOF'
+# Smart Content Forge — AI Session
+
+**Topic:** {{TOPIC}}
+**Date:** {{DATE}}
+**Output Directory:** {{OUTPUT_DIR}}
+
+## Your Mission
+You are an elite content strategist, SEO specialist, and creative director. Your job is to take the topic above and deliver a complete content package.
+
+---
+
+## Step 1 — Deep Research
+Before writing ANY content, research the topic thoroughly:
+1. Search the web for current trends, stats, and authoritative sources on this topic.
+2. Identify the target audience and their pain points.
+3. Find high-performing keywords and phrases for SEO.
+4. Note any recent news, frameworks, or tools related to the topic.
+
+Summarize your research in 3-5 bullet points. Cite sources.
+
+---
+
+## Step 2 — LinkedIn Post (~200 words)
+Write a scroll-stopping LinkedIn post that:
+- Hooks the reader in the first line (use a bold statement, question, or stat).
+- Delivers 2-3 actionable insights or a mini-story.
+- Ends with a clear call-to-action (comment, share, follow).
+- Uses short paragraphs and line breaks for mobile readability.
+- Includes 5-7 strategic hashtags (mix of broad and niche).
+
+**Output file:** `linkedin.md`
+
+---
+
+## Step 3 — Portfolio Blog Post (~400 words, SEO-rich)
+Write a professional blog post formatted for a Next.js/Astro portfolio site.
+
+**Required Frontmatter:**
+```yaml
+---
+title: "[SEO-Optimized Title]"
+slug: "[url-friendly-slug]"
+date: "{{DATE}}"
+excerpt: "[150-160 character meta description for SEO]"
+tags:
+  - [tag1]
+  - [tag2]
+  - [tag3]
+  - [tag4]
+  - [tag5]
+category: "[Primary Category]"
+author: "Unnat"
+featured: false
+coverImage: "/images/blog/[slug]-cover.png"
+seo:
+  title: "[60-char SEO title]"
+  description: "[meta description]"
+  keywords:
+    - [keyword1]
+    - [keyword2]
+    - [keyword3]
+---
+```
+
+**Body Requirements:**
+- Compelling H1 title
+- Engaging intro paragraph (state the problem + promise the solution)
+- 2-3 H2 subheadings with valuable content
+- Use bullet points and bold text for scannability
+- Include internal linking opportunity notes (e.g., `[LINK: related-post]`)
+- End with a strong CTA (subscribe, hire, contact, etc.)
+- Naturally weave primary and secondary keywords throughout
+- Keep it between 380-420 words
+
+**Output file:** `blog.md`
+
+---
+
+## Step 4 — Image Generation Prompts (3x)
+Create 3 distinct, highly detailed prompts for an AI image generator (Midjourney, DALL·E, or Stable Diffusion).
+
+Each prompt must:
+- Be vivid and descriptive (style, lighting, composition, mood, colors).
+- Be directly relevant to the topic.
+- Suggest a different visual angle (e.g., one conceptual, one practical, one abstract).
+- Include aspect ratio recommendation (16:9 for blog hero, 1:1 for LinkedIn).
+
+**Output file:** `image-prompts.md`
+
+---
+
+## Step 5 — Deliver
+Save all 3 files into: **{{OUTPUT_DIR}}**
+After saving, list the files and show a preview of each.
+PROMPT_EOF
+
+# Replace placeholders
+sed -i "s|{{TOPIC}}|$TOPIC|g" "$PROMPT_FILE"
+sed -i "s|{{DATE}}|$DATE_PREFIX|g" "$PROMPT_FILE"
+sed -i "s|{{OUTPUT_DIR}}|$OUTPUT_DIR|g" "$PROMPT_FILE"
+
+echo "🤖 AI prompt generated: $PROMPT_FILE"
+echo ""
+
+# ── Check for kimi CLI ────────────────────────────────────────────────────────
+if command -v kimi &> /dev/null; then
+    echo "💡 kimi CLI detected."
+    read -rp "⚡ Run the AI session now? [Y/n]: " RUN_NOW
+    RUN_NOW="${RUN_NOW:-Y}"
+    if [[ "$RUN_NOW" =~ ^[Yy]$ ]]; then
+        echo ""
+        echo "🚀 Launching AI content session..."
+        echo ""
+        cd "$OUTPUT_DIR" && kimi -f prompt.md
+        exit 0
+    fi
+fi
+
+# ── Manual Instructions ───────────────────────────────────────────────────────
+echo "────────────────────────────────────────────────────────────────"
+echo ""
+echo "🎯 Next steps:"
+echo ""
+echo "   Option A — Let kimi handle it:"
+echo "      cd $OUTPUT_DIR && kimi -f prompt.md"
+echo ""
+echo "   Option B — Copy the prompt into your AI chat of choice."
+echo ""
+echo "📁 Your workspace: $OUTPUT_DIR"
+echo ""
+ls -la "$OUTPUT_DIR"
+echo ""
