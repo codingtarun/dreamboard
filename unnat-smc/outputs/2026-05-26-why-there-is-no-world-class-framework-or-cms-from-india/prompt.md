@@ -1,58 +1,8 @@
-#!/usr/bin/env bash
-set -euo pipefail
-
-# ═══════════════════════════════════════════════════════════════════════════════
-#   unnat-smc  —  Smart Content Forge
-#   Usage: ./create-content ["Your Topic"]
-#          ./create-content          (interactive mode)
-# ═══════════════════════════════════════════════════════════════════════════════
-
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-OUTPUT_BASE="$SCRIPT_DIR/outputs"
-DATE_PREFIX="$(date +%Y-%m-%d)"
-
-# ── Helpers ───────────────────────────────────────────────────────────────────
-slugify() {
-    echo "$1" | tr '[:upper:]' '[:lower:]' | tr -cs 'a-z0-9' '-' | sed 's/-$//;s/^-//'
-}
-
-prompt_topic() {
-    if [ $# -gt 0 ]; then
-        echo "$*"
-        return
-    fi
-    echo ""
-    echo "┌─────────────────────────────────────────────────────────────┐"
-    echo "│           🚀  unnat-smc — Smart Content Forge                │"
-    echo "└─────────────────────────────────────────────────────────────┘"
-    echo ""
-    read -rp "📝 Enter your topic / idea: " topic
-    if [ -z "$topic" ]; then
-        echo "❌ Topic cannot be empty. Exiting."
-        exit 1
-    fi
-    echo "$topic"
-}
-
-# ── Main ──────────────────────────────────────────────────────────────────────
-TOPIC="$(prompt_topic "$@")"
-SLUG="$(slugify "$TOPIC")"
-OUTPUT_DIR="$OUTPUT_BASE/$DATE_PREFIX-$SLUG"
-mkdir -p "$OUTPUT_DIR"
-
-echo ""
-echo "✅ Output directory: $OUTPUT_DIR"
-echo ""
-
-# ── Generate AI Prompt ────────────────────────────────────────────────────────
-PROMPT_FILE="$OUTPUT_DIR/prompt.md"
-
-cat > "$PROMPT_FILE" << 'PROMPT_EOF'
 # Smart Content Forge — AI Session
 
-**Topic:** {{TOPIC}}
-**Date:** {{DATE}}
-**Output Directory:** {{OUTPUT_DIR}}
+**Topic:** Why there is no world class framework or CMS from India
+**Date:** 2026-05-26
+**Output Directory:** /home/tarun/Desktop/Apps/dreamboard/unnat-smc/outputs/2026-05-26-why-there-is-no-world-class-framework-or-cms-from-india
 
 ## Your Mission
 You are an elite content strategist, SEO specialist, and creative director. Your job is to take the topic above and deliver a complete content package.
@@ -90,7 +40,7 @@ Write a professional blog post formatted for a Next.js/Astro portfolio site.
 ---
 title: "[SEO-Optimized Title]"
 slug: "[url-friendly-slug]"
-date: "{{DATE}}"
+date: "2026-05-26"
 excerpt: "[150-160 character meta description for SEO]"
 tags:
   - [tag1]
@@ -200,43 +150,5 @@ Each prompt must:
 ---
 
 ## Step 6 — Deliver
-Save all 7 files into: **{{OUTPUT_DIR}}**
+Save all 7 files into: **/home/tarun/Desktop/Apps/dreamboard/unnat-smc/outputs/2026-05-26-why-there-is-no-world-class-framework-or-cms-from-india**
 After saving, list the files and show a preview of each.
-PROMPT_EOF
-
-# Replace placeholders
-sed -i "s|{{TOPIC}}|$TOPIC|g" "$PROMPT_FILE"
-sed -i "s|{{DATE}}|$DATE_PREFIX|g" "$PROMPT_FILE"
-sed -i "s|{{OUTPUT_DIR}}|$OUTPUT_DIR|g" "$PROMPT_FILE"
-
-echo "🤖 AI prompt generated: $PROMPT_FILE"
-echo ""
-
-# ── Check for kimi CLI ────────────────────────────────────────────────────────
-if command -v kimi &> /dev/null; then
-    echo "💡 kimi CLI detected."
-    read -rp "⚡ Run the AI session now? [Y/n]: " RUN_NOW
-    RUN_NOW="${RUN_NOW:-Y}"
-    if [[ "$RUN_NOW" =~ ^[Yy]$ ]]; then
-        echo ""
-        echo "🚀 Launching AI content session..."
-        echo ""
-        cd "$OUTPUT_DIR" && kimi -f prompt.md
-        exit 0
-    fi
-fi
-
-# ── Manual Instructions ───────────────────────────────────────────────────────
-echo "────────────────────────────────────────────────────────────────"
-echo ""
-echo "🎯 Next steps:"
-echo ""
-echo "   Option A — Let kimi handle it:"
-echo "      cd $OUTPUT_DIR && kimi -f prompt.md"
-echo ""
-echo "   Option B — Copy the prompt into your AI chat of choice."
-echo ""
-echo "📁 Your workspace: $OUTPUT_DIR"
-echo ""
-ls -la "$OUTPUT_DIR"
-echo ""

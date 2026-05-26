@@ -1,0 +1,199 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# ═══════════════════════════════════════════════════════════════════════════════
+#   unnat-smc  —  Code Content Forge
+#   Usage: ./create-code-content ["Your Topic / Code Snippet"]
+#          ./create-code-content          (interactive mode)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+OUTPUT_BASE="$SCRIPT_DIR/outputs"
+DATE_PREFIX="$(date +%Y-%m-%d)"
+
+# ── Helpers ───────────────────────────────────────────────────────────────────
+slugify() {
+    echo "$1" | tr '[:upper:]' '[:lower:]' | tr -cs 'a-z0-9' '-' | sed 's/-$//;s/^-//'
+}
+
+prompt_topic() {
+    if [ $# -gt 0 ]; then
+        echo "$*"
+        return
+    fi
+    echo ""
+    echo "┌─────────────────────────────────────────────────────────────┐"
+    echo "│        🚀  unnat-smc — Code Content Forge                    │"
+    echo "└─────────────────────────────────────────────────────────────┘"
+    echo ""
+    read -rp "📝 Enter your topic / code idea: " topic
+    if [ -z "$topic" ]; then
+        echo "❌ Topic cannot be empty. Exiting."
+        exit 1
+    fi
+    echo "$topic"
+}
+
+# ── Main ──────────────────────────────────────────────────────────────────────
+TOPIC="$(prompt_topic "$@")"
+SLUG="$(slugify "$TOPIC")"
+OUTPUT_DIR="$OUTPUT_BASE/$DATE_PREFIX-$SLUG"
+mkdir -p "$OUTPUT_DIR"
+
+echo ""
+echo "✅ Output directory: $OUTPUT_DIR"
+echo ""
+
+# ── Generate AI Prompt ────────────────────────────────────────────────────────
+PROMPT_FILE="$OUTPUT_DIR/prompt.md"
+
+cat > "$PROMPT_FILE" << 'PROMPT_EOF'
+# Code Content Forge — AI Session
+
+**Topic:** {{TOPIC}}
+**Date:** {{DATE}}
+**Output Directory:** {{OUTPUT_DIR}}
+
+## Your Mission
+You are an elite developer advocate and content strategist. Your job is to take the code topic above and deliver a tight, high-engagement LinkedIn post + 2 branded graphics.
+
+---
+
+## Step 1 — Understand the Input
+The user may have provided:
+- A raw code snippet (PHP, Laravel, etc.)
+- A concept or pattern name (e.g., "PHP Pipeline Pattern", "Laravel Service Containers")
+- A problem + solution description
+
+If raw code was provided:
+1. Analyze what the code does and why it matters.
+2. Extract the "aha" insight or best practice.
+3. Write the LinkedIn post around that insight, using the code as proof.
+
+If only a topic was provided:
+1. Invent a concise, real-world code example that demonstrates the concept.
+2. The code should be production-quality, well-commented, and under 25 lines.
+
+---
+
+## Step 2 — LinkedIn Post (~180-220 words)
+Write a scroll-stopping LinkedIn post for developers that:
+- **Hook:** Opens with a relatable pain point, a bold claim, or a "Most developers don't know..." line.
+- **Body:** Explains the concept in 2-3 short paragraphs. Use emojis sparingly (1-2 max).
+- **Code teaser:** Mentions that the code example is in the comments / image / thread.
+- **CTA:** Asks a question to drive comments (e.g., "Have you used this pattern?" or "What's your go-to approach?").
+- **Hashtags:** 5-7 tags mixing broad (#PHP #Laravel #WebDev) and niche (#CleanCode #Backend).
+
+**Output file:** `linkedin.md`
+
+---
+
+## Step 3 — Visual Identity (Locked)
+**MANDATORY:** Use the Unnat Digital portfolio color system for both graphics.
+
+**Color Palette:**
+| Token | Hex | Usage |
+|-------|-----|-------|
+| Primary | `#B85C3F` | CTAs, accents, highlights, key shapes |
+| Primary Hover | `#A34E33` | Hover states, secondary accents |
+| Dark | `#2A2420` | Headlines, body text, terminal background |
+| Light | `#FFFFFF` | Cards, surfaces |
+| Light Darkened | `#F6F3EF` | Page / canvas background |
+| Muted | `#9E9188` | Subtext, captions, line numbers |
+
+**Typography:**
+- Display: Geist / Sora (bold, geometric sans-serif)
+- Body: Inter / DM Sans (clean sans-serif)
+- Code / Labels: Geist Mono / JetBrains Mono (monospace)
+
+**Style:** Warm minimalism, geometric precision, builder aesthetic.
+
+Save this as: `visual-identity.md`
+
+---
+
+## Step 4 — Graphic 1: Topic Highlight (1080×1080)
+Create `graphic-topic-highlight.png` — a clean, bold graphic that communicates the TOPIC at a glance.
+
+**Design:**
+- Warm porcelain (`#F6F3EF`) or white (`#FFFFFF`) background.
+- Large headline in dark (`#2A2420`) or terracotta (`#B85C3F`).
+- 1-2 supporting keywords or a micro-description in muted (`#9E9188`).
+- Geometric terracotta accents (rectangles, circles, lines).
+- Sharp corners (radius ≤ 8px) for that tech feel.
+- No code in this graphic — just the concept.
+
+Use Python with Pillow (PIL) to generate this programmatically.
+
+**Output file:** `graphic-topic-highlight.png`
+
+---
+
+## Step 5 — Graphic 2: Code Example (1080×1080)
+Create `graphic-code-example.png` — a terminal-style code snippet graphic.
+
+**Design:**
+- Dark espresso (`#2A2420`) terminal window with chrome bar (`#3A3430`).
+- 3 window dots in portfolio colors (terracotta, light terracotta, muted).
+- Window title in monospace (e.g., `Pipeline.php — ~/app/Services`).
+- 15-25 lines of the actual code example, syntax-highlighted:
+  - PHP tags / keywords → `#B85C3F`
+  - Variables / strings → `#D9835F`
+  - Comments → `#9E9188`
+  - Standard code → `#F6F3EF`
+- Line numbers in muted tone on the left.
+- A `❯` prompt or blinking cursor at the bottom.
+- Below the terminal: geometric terracotta blocks + a small label like "Unnat Digital" or the topic hashtag.
+
+Use Python with Pillow (PIL) to generate this programmatically.
+
+**Output file:** `graphic-code-example.png`
+
+---
+
+## Step 6 — Deliver
+Save all 4 files into: **{{OUTPUT_DIR}}**
+- `linkedin.md`
+- `visual-identity.md`
+- `graphic-topic-highlight.png`
+- `graphic-code-example.png`
+
+After saving, list the files and show a preview of each.
+PROMPT_EOF
+
+# Replace placeholders
+sed -i "s|{{TOPIC}}|$TOPIC|g" "$PROMPT_FILE"
+sed -i "s|{{DATE}}|$DATE_PREFIX|g" "$PROMPT_FILE"
+sed -i "s|{{OUTPUT_DIR}}|$OUTPUT_DIR|g" "$PROMPT_FILE"
+
+echo "🤖 AI prompt generated: $PROMPT_FILE"
+echo ""
+
+# ── Check for kimi CLI ────────────────────────────────────────────────────────
+if command -v kimi &> /dev/null; then
+    echo "💡 kimi CLI detected."
+    read -rp "⚡ Run the AI session now? [Y/n]: " RUN_NOW
+    RUN_NOW="${RUN_NOW:-Y}"
+    if [[ "$RUN_NOW" =~ ^[Yy]$ ]]; then
+        echo ""
+        echo "🚀 Launching AI code content session..."
+        echo ""
+        cd "$OUTPUT_DIR" && kimi -f prompt.md
+        exit 0
+    fi
+fi
+
+# ── Manual Instructions ───────────────────────────────────────────────────────
+echo "────────────────────────────────────────────────────────────────"
+echo ""
+echo "🎯 Next steps:"
+echo ""
+echo "   Option A — Let kimi handle it:"
+echo "      cd $OUTPUT_DIR && kimi -f prompt.md"
+echo ""
+echo "   Option B — Copy the prompt into your AI chat of choice."
+echo ""
+echo "📁 Your workspace: $OUTPUT_DIR"
+echo ""
+ls -la "$OUTPUT_DIR"
+echo ""
